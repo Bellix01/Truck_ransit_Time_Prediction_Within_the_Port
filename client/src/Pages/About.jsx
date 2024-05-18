@@ -23,6 +23,67 @@ const About = () => {
 					aliquid ratione facere enim eveniet modi necessitatibus quas
 					asperiores pariatur, amet velit?
 				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				<p>
+					Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
+					eos tenetur beatae nihil dolorum possimus voluptate esse voluptatibus,
+					aliquid ratione facere enim eveniet modi necessitatibus quas
+					asperiores pariatur, amet velit?
+				</p>
+				
 			</div>
 		</div>
 	);

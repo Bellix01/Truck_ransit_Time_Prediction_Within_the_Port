@@ -7,26 +7,51 @@
 	box-sizing: border-box;
 }
 
-body {
-	font-family: 'Poppins', sans-serif;
-	/* font-family: var(--font-libre_franklin), sans-serif; */
-	font-size: 16px;
-	background: #f6f6f6;
-	overflow: auto;
-}
-
-a {
-	text-decoration: none;
-}
-
-ul {
+nav {
+	background-color: #ffffff;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	box-shadow: 0 4px 2px -2px gray; /* Optional: Adds a shadow for better visibility */
+	z-index: 1000; /* Ensures the navbar is on top of other content */
+  }
+  
+  .nav-items {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+  }
+  
+  .logo img {
+	max-height: 50px;
+  }
+  
+  ul {
 	list-style: none;
-}
-
-img {
-	max-width: 100%;
-}
-
+	margin: 0;
+	padding: 0;
+	display: flex;
+  }
+  
+  li {
+	margin-left: 20px;
+  }
+  
+  a {
+	text-decoration: none;
+	color: #333;
+	font-weight: bold;
+  }
+  
+  a:hover {
+	color: #007BFF;
+	
+  }
+  .main-content {
+	padding-top: 100px;
+	flex-grow: 1;
+  }
 .container {
 	max-width: 1200px;
 	margin: 0 auto;

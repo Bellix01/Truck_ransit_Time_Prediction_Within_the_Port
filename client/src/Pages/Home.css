@@ -1,89 +1,98 @@
-.home {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 0 16px;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .text-section {
-    margin-bottom: 24px;
-  }
-  
-  .text-section h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 16px;
-  }
-  
-  .text-section p {
-    font-size: 1rem;
-    color: gray;
-    margin-bottom: 24px;
-  }
-  
-  .home .btn {
-	margin-top: 50px;
-	display: inline-block;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	background: #33454fd1;
-	color: #fff;
-	cursor: pointer;
-	
+/* Home.css */
+
+.container {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
- */
- .home .text-section .btn:hover {
-    background: #0097e6;
-  }
-  
-  .image-placeholder {
-    display: none;
-    width: 100%;
-    max-width: 400px;
-    height: 200px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .image-placeholder .icon {
-    width: 48px;
-    height: 48px;
-    color: #ccc;
-  }
-  
-  /* Media Query for larger screens */
-  @media (min-width: 768px) {
-    .content {
-      flex-direction: row;
-      justify-content: space-between;
-      text-align: left;
-    }
-  
-    .text-section {
-      margin-bottom: 0;
-    }
-  
-    .text-section h1 {
-      font-size: 3rem;
-    }
-  
-    .text-section p {
-      font-size: 1.25rem;
-    }
-  
-    .image-placeholder {
-      display: flex;
-    }
-  }
-  
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.text-section {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.text-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.text-section p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: blue;
+}
+
+.image-placeholder {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f7fa;
+  height: 300px;
+  border-radius: 8px;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  color: #ccc;
+}
+
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 50px;
+}
+
+.info-card {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+  color: gray;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.info-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.info-card p {
+  font-size: 1em;
+  color: #555;
+}
+
+.image {
+  width: 100%; /* Ensures the image takes up the full width of its container */
+  height: 100%; /* Ensures the image takes up the full height of its container */
+  object-fit: cover; /* Ensures the image fills the entire container, maintaining aspect ratio */
+  border-radius: 8px;
+}

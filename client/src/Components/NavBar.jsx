@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import logo from './logo.png'
 const NavBar = () => {
 	return (
-		<div>
+		<div className="main-content">
 			<nav>
 				<div className="nav-items container">
 					<div className="logo">

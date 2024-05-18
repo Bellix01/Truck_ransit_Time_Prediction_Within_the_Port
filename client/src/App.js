@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './Components/NavBar';
+import Footer from './Components/Footer';
 const Home = lazy(() => import('./Pages/Home'));
 const About = lazy(() => import('./Pages/About'));
 const Eda = lazy(() => import('./Pages/Eda'));
@@ -20,6 +21,7 @@ const App = () => {
 					<Route path="*" element={<NoMatch />} />
 				</Routes>
 			</Suspense>
+			<Footer />
 		</>
 	);
 };
