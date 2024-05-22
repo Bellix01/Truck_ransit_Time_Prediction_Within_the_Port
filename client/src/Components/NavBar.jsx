@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import logo from './logo.png'
 const NavBar = () => {
 	return (
-		<div className="main-content">
+		// <div className="main-content">
 			<nav>
 				<div className="nav-items container">
 					<div className="logo">
@@ -16,15 +16,19 @@ const NavBar = () => {
 							<NavLink to="/">Home</NavLink>
 						</li>
 						<li>
-							<NavLink to="/about">About</NavLink>
+							<NavLink to="/Prediction">Prediction</NavLink>
 						</li>
+						
 						<li>
 							<NavLink to="/Eda">EDA</NavLink>
+						</li>
+						<li>
+							<NavLink to="/about">About</NavLink>
 						</li>
 					</ul>
 				</div>
 			</nav>
-		</div>
+		// </div>
 	);
 };
 
