@@ -2,42 +2,116 @@ from flask import Flask, request, jsonify
 import joblib
 import pandas as pd
 import os
-from flask_sqlalchemy import SQLAlchemy
 from preprocessing import preprocessing
-from sqlalchemy.sql import text
+import pyodbc
+import json
+from flask_cors import CORS
 
-db = SQLAlchemy()
-# create the app
 app = Flask(__name__)
-# change string to the name of your database; add path if necessary
-db_name = 'BD3.db'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-# initialize the app with Flask-SQLAlchemy
-db.init_app(app)
+CORS(app)
 
 
-# Get the current working directory
+# initialize the connection with database
+def connection():
+    server = 'DESKTOP-9HOJAES'  
+    database = 'BD' 
+    user = 'sa'
+    password = '@sql2001@' #Your login password
+    cstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+user+';PWD='+ password
+    conn = pyodbc.connect(cstr)
+    return conn
+
+# Load the saved model
 cwd = os.getcwd()
 model_path = os.path.join(cwd, 'best_model.pkl')
 print(model_path)
 model = joblib.load(model_path)
 
-@app.route('/')
-def testdb():
+# Connection with SQL Server database
+@app.route("/")
+def main():
+    customers = []
     try:
-        db.session.query(text('1')).from_statement(text('SELECT 1')).all()
-        return '<h1>It works.</h1>'
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+                SELECT TOP 100
+                    AMP_ID,
+                    TYPE_UNITE,
+                    SS_TYPE_UNITE,
+                    VIDE_PLEIN,
+                    NATURE_MARCHANDISE,
+                    TERMINAL,
+                    POIDS,
+                    COULOIR,
+                    DATE_ZRE
+                FROM dbo.truck_info
+                ORDER BY DATE_ZRE DESC
+            """)
+        for row in cursor.fetchall():
+              customers.append({
+                    "AMP_ID": row[0],
+                    "TYPE_UNITE": row[1],
+                    "SS_TYPE_UNITE": row[2],
+                    "VIDE_PLEIN": row[3],
+                    "NATURE_MARCHANDISE": row[4],
+                    "TERMINAL": row[5],
+                    "POIDS": row[6],
+                    "COULOIR": row[7],
+                    "DATE_ZRE": row[8]
+                })
+        conn.close()
     except Exception as e:
-        # e holds description of the error
-        error_text = "<p>The error:<br>" + str(e) + "</p>"
-        hed = '<h1>Something is broken.</h1>'
-        return hed + error_text
+        return jsonify({"error": str(e)}), 500
+    return json.dumps(customers, indent=4)
 
-@app.route('/predict', methods=['POST'])
+# get informationform database for the specific AMP ID
+@app.route('/get_truck_info', methods=['POST'])
+def get_truck_info():
+    data = request.json
+    amp_id = data.get('AMP_ID')
+    print(amp_id)
+    if not amp_id:
+        return jsonify({"error": "AMP_ID is required"}), 400
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+                SELECT
+                    TYPE_UNITE,
+                    SS_TYPE_UNITE,
+                    VIDE_PLEIN,
+                    NATURE_MARCHANDISE,
+                    TERMINAL,
+                    POIDS,
+                    COULOIR,
+                    DATE_ZRE
+                FROM dbo.truck_info
+                WHERE AMP_ID =?
+         """, (amp_id,))
+        truck_row = cursor.fetchone()
+        conn.close()
+
+        if truck_row:
+            truck_info = {
+                "TYPE_UNITE": truck_row[0],
+                "SS_TYPE_UNITE": truck_row[1],
+                "VIDE_PLEIN": truck_row[2],
+                "NATURE_MARCHANDISE": truck_row[3],
+                "TERMINAL": truck_row[4],
+                "POIDS": truck_row[5],
+                "COULOIR": truck_row[6],
+                "DATE_ZRE": truck_row[7]
+            }
+            return jsonify(truck_info)
+        else:
+            return jsonify({"error": "No data found for the given AMP_ID"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# Precidtion API
+@app.route('/get_prediction', methods=['POST'])
 def predict():
     data = request.get_json()
     df = pd.DataFrame(data, index=[0])

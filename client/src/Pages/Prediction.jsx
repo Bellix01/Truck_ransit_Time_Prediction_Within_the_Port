@@ -4,15 +4,19 @@ import { Column } from "primereact/column";
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import copy from 'clipboard-copy';
-import './Prediction.css';  
+import './Prediction.css'; 
+import './Home.css' 
 
 const Prediction = () => {
-    const [customers, setCustomers] = useState([]);
+    const [trucks, setTrucks] = useState([]);
+    const [truckInfo, setTruckInfo] = useState([]);
     const [globalFilter, setGlobalFilter] = useState("");
     const [copyRowId, setCopyRowId] = useState(null);
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
     const [value, setValue] = useState("");
+    const [showInfoCard, setShowInfoCard] = useState(false);
 
+    // fetching the data
     useEffect(() => {
         fetch("http://127.0.0.1:5000/")
             .then(response => {
@@ -21,13 +25,62 @@ const Prediction = () => {
                 }
                 return response.json();
             })
-            .then(data => setCustomers(data))
+            .then(data => {
+                
+                setTrucks(data)
+                // console.log(data);
+            })
             .catch(error => console.error("Error fetching data:", error));
     }, []);
 
-    //part of copy button
-    const handleCopy = (customerId) => {
-        copy(customerId);
+    // fetching a specific row from data
+    const getDataRow = () => {
+        fetch("http://127.0.0.1:5000/get_truck_info", {
+            method:"POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ AMP_ID: value })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setTruckInfo(data)
+            setShowInfoCard(true);
+            // console.log(data);
+        })
+        .catch(error => console.error("Error fetching truck info:", error));
+    };
+
+    // get prediction API
+    const getPrediction = () => {
+        fetch("http://127.0.0.1:5000/get_prediction", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(truckInfo)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the prediction result
+            console.log("Prediction result:", data);
+        })
+        .catch(error => console.error("Error fetching prediction:", error));
+    };
+
+    // Part of copy button
+    const handleCopy = (ampId) => {
+        copy(ampId);
         setShowCopiedMessage(true);
  
         setTimeout(() => {
@@ -36,7 +89,7 @@ const Prediction = () => {
     };
 
     const handleRowEnter = (rowData) => {
-        setCopyRowId(rowData.CustomerID);
+        setCopyRowId(rowData.AMP_ID);
     };
     
     const handleRowLeave = () => {
@@ -44,7 +97,7 @@ const Prediction = () => {
     };
     
     const renderCopyButton = (rowData) => {
-        const isCopyVisible = rowData.CustomerID === copyRowId;
+        const isCopyVisible = rowData.AMP_ID === copyRowId;
     
         return (
             <div
@@ -52,14 +105,14 @@ const Prediction = () => {
                 onMouseLeave={handleRowLeave}
                 className="copy-button-container"
             >
-                <span>{rowData.CustomerID}</span>
+                <span>{rowData.AMP_ID}</span>
                 {isCopyVisible && (
                     <>
                     <Button 
                         icon="pi pi-copy"
                         className="copy-icon" 
                         tooltip=""
-                        onClick={() => handleCopy(rowData.CustomerID)} 
+                        onClick={() => handleCopy(rowData.AMP_ID)} 
                     />
                     {showCopiedMessage && <span className="copied-message">Copied</span>}
                 </>
@@ -68,7 +121,7 @@ const Prediction = () => {
         );
     };
 
-//    Part of search and clear
+    // Part of search and clear
     const clearSearch = () => {
         setGlobalFilter("");
     };
@@ -98,51 +151,68 @@ const Prediction = () => {
     };
     const header = renderHeader();
     
-    const footer = <p>Total customers = {customers ? customers.length : 0}</p>;
+    const footer = <p className="table-footer">Total records = {trucks ? trucks.length : 0}</p>;
 
     return (
         <div className="container">
             <div className="table-wrapper">
-              
-                {/* <div className="card"> */}
                 <DataTable
-                    value={customers}
+                    value={trucks}
                     paginator
                     removableSort
                     rows={5}
                     scrollable
                     scrolldirection="horizontal"
-                    // rowsPerPageOptions={[5, 10, 25, 50]}
-                    tableStyle={{ minWidth: '10rem' }}
+                    tableStyle={{ minWidth: '50rem' }}
                     className="custom-table"
                     header={header}
                     globalFilter={globalFilter}
                     footer={footer}
                 >
-                        <Column field="CustomerID" header="Customer ID" sortable style={{ width: '25%' }} body={renderCopyButton} ></Column>  
-                        <Column field="CompanyName" header="Company Name" sortable style={{ width: '25%' }}></Column>
-                        <Column field="ContactName" header="Contact Name" sortable style={{ width: '25%' }}></Column>
-                        <Column field="ContactTitle" header="Contact Title" sortable style={{ width: '25%' }}></Column>
-                        <Column field="Address" header="Address" sortable style={{ width: '25%' }}></Column>
-                        <Column field="City" header="City" sortable style={{ width: '25%' }}></Column>
-                        <Column field="PostalCode" header="Postal Code" sortable style={{ width: '25%' }}></Column>
-                        <Column field="Country" header="Country" sortable style={{ width: '25%' }}></Column>
-                        <Column field="Phone" header="Phone" sortable style={{ width: '25%' }}></Column>
+                    <Column field="AMP_ID" header="AMP ID" sortable style={{ width: '10%' }} body={renderCopyButton} ></Column>  
+                    <Column field="TYPE_UNITE" header="Type Unite" sortable style={{ width: '15%' }}></Column>
+                    <Column field="SS_TYPE_UNITE" header="SS Type Unite" sortable style={{ width: '15%' }}></Column>
+                    <Column field="VIDE_PLEIN" header="Vide/Plein" sortable style={{ width: '10%' }}></Column>
+                    <Column field="NATURE_MARCHANDISE" header="Nature Marchandise" sortable style={{ width: '15%' }}></Column>
+                    <Column field="TERMINAL" header="Terminal" sortable style={{ width: '10%' }}></Column>
+                    <Column field="POIDS" header="Poids" sortable style={{ width: '10%' }}></Column>
+                    <Column field="COULOIR" header="Couloir" sortable style={{ width: '10%' }}></Column>
+                    <Column field="DATE_ZRE" header="Date ZRE" sortable style={{ width: '15%' }}></Column>
                 </DataTable>
-                {/* </div> */}
             </div>
             <div className="predict-section">
                 <div className="sub-section left-div">
                     <h2 className="">Truck Transit Time</h2>
-                    <h5>Enter the AMP_ID to get the specific truck informations.</h5>
+                    <h5>Enter the AMP_ID to get the specific truck information.</h5>
                     <span className="p-float-label">
                         <InputText id="in"  type="text" className="p-inputtext-lg" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Enter AMP_ID" />
                     </span>
                 </div>
                 <div className="sub-section right-div">
-                    <Button label="get the informations" className="p-button-secondary" />
+                    <Button label="Get Information" className="p-button-secondary" onClick={getDataRow}/>
                 </div>
             </div>
+                {showInfoCard && (
+                    <div className="get-info-section">
+                        <div className="truck-info-card">
+                            {truckInfo ? (
+                                <>
+                                    <p><span>Type Unite:</span> {truckInfo.TYPE_UNITE}</p>
+                                    <p><span>SS Type Unite:</span> {truckInfo.SS_TYPE_UNITE}</p>
+                                    <p><span>Vide Plein:</span> {truckInfo.VIDE_PLEIN}</p>
+                                    <p><span>Nature Marchandise:</span> {truckInfo.NATURE_MARCHANDISE}</p>
+                                    <p><span>Terminal:</span> {truckInfo.TERMINAL}</p>
+                                    <p><span>Poid:</span> {truckInfo.POIDS}</p>
+                                    <p><span>Couloir:</span> {truckInfo.COULOIR}</p>
+                                    <p><span>Date ZRE:</span> {truckInfo.DATE_ZRE}</p>
+                                    <Button label="Get Prediction" className="p-button-secondary prediction-button" onClick={getPrediction} />
+                                </>
+                            ) : (
+                                    <p>No information available</p>
+                            )}
+                        </div>
+                    </div>
+                )}  
         </div>
     );
 };
