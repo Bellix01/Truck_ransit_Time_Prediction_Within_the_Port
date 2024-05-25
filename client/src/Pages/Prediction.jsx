@@ -15,7 +15,8 @@ const Prediction = () => {
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
     const [value, setValue] = useState("");
     const [showInfoCard, setShowInfoCard] = useState(false);
-
+    const [predictionvalue, setPredictionValue] = useState("");
+    const [predictionVisible, setPredictionVisible] = useState(false);
     // fetching the data
     useEffect(() => {
         fetch("http://127.0.0.1:5000/")
@@ -51,6 +52,7 @@ const Prediction = () => {
         .then(data => {
             setTruckInfo(data)
             setShowInfoCard(true);
+            setPredictionVisible(false)
             // console.log(data);
         })
         .catch(error => console.error("Error fetching truck info:", error));
@@ -73,7 +75,9 @@ const Prediction = () => {
         })
         .then(data => {
             // Handle the prediction result
-            console.log("Prediction result:", data);
+            setPredictionValue(data);
+            setPredictionVisible(true)
+            // console.log("Prediction result:", data);
         })
         .catch(error => console.error("Error fetching prediction:", error));
     };
@@ -155,7 +159,8 @@ const Prediction = () => {
 
     return (
         <div className="container">
-            <div className="table-wrapper">
+            {/* <div className="table-section"> */}
+            <div className="table-wrapper subb-section">
                 <DataTable
                     value={trucks}
                     paginator
@@ -179,6 +184,12 @@ const Prediction = () => {
                     <Column field="COULOIR" header="Couloir" sortable style={{ width: '10%' }}></Column>
                     <Column field="DATE_ZRE" header="Date ZRE" sortable style={{ width: '15%' }}></Column>
                 </DataTable>
+            {/* </div>
+            <div className="subb-section">
+                <h2>Port Location</h2>
+                <h3>Strategically Located</h3>
+                <p>Our port is situated in a prime location, with easy access to major highways and transportation hubs. This allows for seamless, efficient movement of goods in and out of the port.</p>
+            </div> */}
             </div>
             <div className="predict-section">
                 <div className="sub-section left-div">
@@ -212,7 +223,11 @@ const Prediction = () => {
                             )}
                         </div>
                     </div>
-                )}  
+                )}
+                 
+            <div className={`predict-value-card ${predictionVisible ? '' : 'hidden'}`}>
+                <p><span className="predict-value">Transit Time:</span> {predictionvalue} h</p>
+            </div> 
         </div>
     );
 };

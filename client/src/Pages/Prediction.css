@@ -14,7 +14,13 @@
     margin-bottom: 1rem;
     overflow-x: auto;
 }
-
+/* .table-section{
+    display: flex;
+  justify-content: space-between;
+}
+.subb-section{
+    flex: 1;
+} */
 .table-footer{
     padding: 5px;
 }
@@ -44,7 +50,7 @@
 }
 
 .custom-table .p-datatable-tbody > tr {
-    height: auto; /* Remove fixed height to allow content to dictate row height */
+    height: auto; 
 }
 .custom-table .p-datatable-thead > tr > th {
 	background-color: rgb(187, 187, 187);
@@ -216,4 +222,31 @@
     align-self: end;
     justify-self: end;
     padding: 10px 10px;
+}
+
+/* value prediction section */
+
+.predict-value-card {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: start;
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 30%;
+ 
+}
+.predict-value-card .predict-value {
+   
+    /* margin-left: 60px; */
+    padding: 10px 10px;
+    font-weight: bold; /* Example: Make the prediction value bold */
+    color: #006b14; /* Example: Change the color of the prediction value */
+}
+
+.hidden{
+    display: none;
 }
