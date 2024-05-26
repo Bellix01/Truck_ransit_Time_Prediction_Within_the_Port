@@ -141,20 +141,20 @@ def get_prediction():
                 "dew": weather_rows[6],
                 "visibility": weather_rows[7]
             }
-    logging.debug(f"Fetched weather data sample: {weather_data}")
+    # logging.debug(f"Fetched weather data sample: {weather_data}")
     conn.close()
 
     # Convert weather data to DataFrame and lowercase column names
     # Make sure weather_rows is a list of tuples with the correct length
     weather_data = pd.DataFrame(weather_data, index=[0])
-    logging.debug(f"Fetched weather data sample: {weather_data.columns}")
+    # logging.debug(f"Fetched weather data sample: {weather_data.columns}")
     # weather_data.columns = weather_data.columns.str.lower()
 
     # Convert datetime to datetime object
     weather_data['datetime'] = weather_data['datetime'].dt.strftime('%Y-%m-%d %H:%M:%S.%f')
     weather_data['datetime']  = pd.to_datetime(weather_data['datetime'])
-    logging.debug(f"Fetched weather data type: {type(weather_data['datetime'])}")
-    logging.debug(f"Fetched data type: {type(df['date_zre'])}")
+    # logging.debug(f"Fetched weather data type: {type(weather_data['datetime'])}")
+    # logging.debug(f"Fetched data type: {type(df['date_zre'])}")
     # Merge truck data with weather data based on date_zre and datetime (tolerance of 30 minutes)
     merged_data = pd.merge_asof(df.sort_values('date_zre'), 
                              weather_data.sort_values('datetime'),                              
@@ -185,5 +185,69 @@ def get_prediction():
     # Return the predictions as JSON
     return jsonify(predictions.tolist())
 
+@app.route('/predictions', methods=['POST'])
+def store_predictions():
+    data = request.json
+    amp_id = data.get('amp_id')
+    prediction_value = data.get('prediction_value')
+    if not amp_id:
+        return jsonify({"error": "AMP_ID is required"}), 400
+    if not prediction_value:
+        return jsonify({"error": "Prediction value is required"}), 400
+    # logging.debug(f"amp_id: {amp_id}")
+    # logging.debug(f"prediction_value: {prediction_value[0]}")
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO dbo.predictions (amp_id, prediction_value)
+            VALUES (?, ?)
+        """, (amp_id, prediction_value[0]))
+        conn.commit()
+        conn.close()
+        logging.debug(f"prediction_value: {prediction_value}")
+        return jsonify({"message": "Prediction value stored successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/display_predictions', methods=['GET'])
+def fetch_predictions():
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT amp_id, prediction_value
+            FROM dbo.predictions
+        """)
+        predictions = []
+        for row in cursor.fetchall():
+            predictions.append({
+                "amp_id": row[0],
+                "prediction_value": row[1]
+            })
+        conn.close()
+        return jsonify(predictions), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/check_amp_id_exists',methods=['POST'])
+def check_amp_id_exists():
+    data = request.get_json()
+    amp_id = data.get('amp_id')
+
+    if not amp_id:
+        return jsonify({"error": "No AMP ID provided"}), 400
+
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(1) FROM dbo.predictions WHERE amp_id = ?", (amp_id,))
+        exists = cursor.fetchone()[0] > 0
+        conn.close()
+        return jsonify({"exists": exists}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)

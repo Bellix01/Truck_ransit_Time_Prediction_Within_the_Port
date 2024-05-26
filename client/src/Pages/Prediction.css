@@ -6,13 +6,76 @@
 	
 }
 
-.table-wrapper {
+.top-container{
+    display: flex;
     width: 100%;
+    height: 70vh;
+}
+
+.table-wrapper {
+    flex: 0 0 70%;
     background: var(--surface-card);
     padding: 1rem; /* Adjusted padding */
     border-radius: 10px;
     margin-bottom: 1rem;
+    margin-right: 15px;
     overflow-x: auto;
+}
+.card-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    border-left: 1px solid #ccc;
+    background-color: #f0f0f0; 
+    border-radius: 10px; 
+    position: relative; 
+    max-height: 97%;
+}
+
+.card-section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    position: sticky; /* Keeps the title fixed at the top */
+    top: 0;
+    background: #f0f0f0; /* Same as card section background */
+    padding: 0.5rem 1rem;
+    z-index: 1; /* Ensure the title is above the card content */
+}
+
+.card-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.card-content {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff; /* Background color for cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
+}
+
+.card-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+
+.card-scroll::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+}
+
+.card-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555; 
 }
 /* .table-section{
     display: flex;
@@ -231,7 +294,7 @@
     margin-left: auto;
     margin-right: auto;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     padding: 10px 5px;
     border: 1px solid #ccc;
     border-radius: 8px;
