@@ -141,21 +141,13 @@ def get_prediction():
                 "dew": weather_rows[6],
                 "visibility": weather_rows[7]
             }
-    # logging.debug(f"Fetched weather data sample: {weather_data}")
     conn.close()
 
-    # Convert weather data to DataFrame and lowercase column names
-    # Make sure weather_rows is a list of tuples with the correct length
     weather_data = pd.DataFrame(weather_data, index=[0])
-    # logging.debug(f"Fetched weather data sample: {weather_data.columns}")
-    # weather_data.columns = weather_data.columns.str.lower()
 
-    # Convert datetime to datetime object
     weather_data['datetime'] = weather_data['datetime'].dt.strftime('%Y-%m-%d %H:%M:%S.%f')
     weather_data['datetime']  = pd.to_datetime(weather_data['datetime'])
     # logging.debug(f"Fetched weather data type: {type(weather_data['datetime'])}")
-    # logging.debug(f"Fetched data type: {type(df['date_zre'])}")
-    # Merge truck data with weather data based on date_zre and datetime (tolerance of 30 minutes)
     merged_data = pd.merge_asof(df.sort_values('date_zre'), 
                              weather_data.sort_values('datetime'),                              
                             left_on='date_zre',                                                        
@@ -163,8 +155,7 @@ def get_prediction():
                             direction='nearest', 
                             tolerance=pd.Timedelta('30 minutes'))
 
-    # Drop rows where merge_asof could not find a match within the tolerance
-    merged_data.dropna(inplace=True)
+    merged_data = merged_data.drop('datetime', axis =1)
 
     if merged_data.empty:
         return jsonify({"error": "No matching weather data found within 30 minutes tolerance"}), 400
@@ -179,10 +170,8 @@ def get_prediction():
         processed_data[col] = 0
     processed_data = processed_data[expected_columns]
 
-    # Make predictions using the model
     predictions = model.predict(processed_data)
     
-    # Return the predictions as JSON
     return jsonify(predictions.tolist())
 
 @app.route('/predictions', methods=['POST'])
@@ -194,8 +183,6 @@ def store_predictions():
         return jsonify({"error": "AMP_ID is required"}), 400
     if not prediction_value:
         return jsonify({"error": "Prediction value is required"}), 400
-    # logging.debug(f"amp_id: {amp_id}")
-    # logging.debug(f"prediction_value: {prediction_value[0]}")
     try:
         conn = connection()
         cursor = conn.cursor()
@@ -205,7 +192,7 @@ def store_predictions():
         """, (amp_id, prediction_value[0]))
         conn.commit()
         conn.close()
-        logging.debug(f"prediction_value: {prediction_value}")
+        # logging.debug(f"prediction_value: {prediction_value}")
         return jsonify({"message": "Prediction value stored successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

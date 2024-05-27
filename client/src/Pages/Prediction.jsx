@@ -251,15 +251,15 @@ const Prediction = () => {
                         globalFilter={globalFilter}
                         footer={footer}
                     >
-                        <Column field="AMP_ID" header="AMP ID" sortable style={{ width: '10%' }} body={renderCopyButton} ></Column>  
-                        <Column field="TYPE_UNITE" header="Type Unite" sortable style={{ width: '15%' }}></Column>
-                        <Column field="SS_TYPE_UNITE" header="SS Type Unite" sortable style={{ width: '15%' }}></Column>
-                        <Column field="VIDE_PLEIN" header="Vide/Plein" sortable style={{ width: '10%' }}></Column>
-                        <Column field="NATURE_MARCHANDISE" header="Nature Marchandise" sortable style={{ width: '15%' }}></Column>
-                        <Column field="TERMINAL" header="Terminal" sortable style={{ width: '10%' }}></Column>
-                        <Column field="POIDS" header="Poids" sortable style={{ width: '10%' }}></Column>
-                        <Column field="COULOIR" header="Couloir" sortable style={{ width: '10%' }}></Column>
-                        <Column field="DATE_ZRE" header="Date ZRE" sortable style={{ width: '15%' }}></Column>
+                        <Column field="AMP_ID" header="AMP ID" sortable style={{ width: '10%' }} body={renderCopyButton} />
+                        <Column field="TYPE_UNITE" header="Unit Type" sortable style={{ width: '15%' }} />
+                        <Column field="SS_TYPE_UNITE" header="Sub Unit Type" sortable style={{ width: '15%' }} />
+                        <Column field="VIDE_PLEIN" header="Empty/Full" sortable style={{ width: '10%' }} />
+                        <Column field="NATURE_MARCHANDISE" header="Nature of Goods" sortable style={{ width: '15%' }} />
+                        <Column field="TERMINAL" header="Terminal" sortable style={{ width: '10%' }} />
+                        <Column field="POIDS" header="Weight" sortable style={{ width: '10%' }} />
+                        <Column field="COULOIR" header="Lane" sortable style={{ width: '10%' }} />
+                        <Column field="DATE_ZRE" header="ZRE Date" sortable style={{ width: '15%' }} />
                     </DataTable>
                 </div>
                 <div className="card-section">
